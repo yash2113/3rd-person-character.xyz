@@ -15,6 +15,12 @@ public class AnimatorManager : MonoBehaviour
         vertical = Animator.StringToHash("Vertical");
     }
 
+    public void PlayargetAnimation(string targetAnimation, bool isInteracting)
+    {
+        animator.SetBool("isInteracting", isInteracting);
+        animator.CrossFade(targetAnimation, 0.2f);
+    }
+
     public void UpdateAnimatorValues(float horizontalMovement, float verticalMovement, bool isSprinting)
     {
         //Animation Snapping
@@ -76,5 +82,4 @@ public class AnimatorManager : MonoBehaviour
         animator.SetFloat(horizontal, snapperHorizontal, 0.1f, Time.deltaTime);
         animator.SetFloat(vertical, snapperVertical, 0.1f, Time.deltaTime);
     }
-
 }
