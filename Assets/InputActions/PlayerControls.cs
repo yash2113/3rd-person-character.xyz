@@ -255,6 +255,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Roll"",
+                    ""type"": ""Button"",
+                    ""id"": ""98e82082-d397-4004-a1e7-f659cf659bc2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Slide"",
+                    ""type"": ""Button"",
+                    ""id"": ""c349f457-0dda-4a4b-8d0a-349fdb11c195"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -323,6 +341,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""X"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e197e1c-948f-4c79-83c8-abd7fa48099f"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a362b1da-de3a-44b1-94aa-47687647e16a"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04d15d81-6256-43e7-bc32-809c0444d818"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Slide"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""067dff84-2791-40f3-81c6-c45396083983"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Slide"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -338,6 +400,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_B = m_PlayerActions.FindAction("B", throwIfNotFound: true);
         m_PlayerActions_Jump = m_PlayerActions.FindAction("Jump", throwIfNotFound: true);
         m_PlayerActions_X = m_PlayerActions.FindAction("X", throwIfNotFound: true);
+        m_PlayerActions_Roll = m_PlayerActions.FindAction("Roll", throwIfNotFound: true);
+        m_PlayerActions_Slide = m_PlayerActions.FindAction("Slide", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -456,6 +520,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_B;
     private readonly InputAction m_PlayerActions_Jump;
     private readonly InputAction m_PlayerActions_X;
+    private readonly InputAction m_PlayerActions_Roll;
+    private readonly InputAction m_PlayerActions_Slide;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -463,6 +529,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @B => m_Wrapper.m_PlayerActions_B;
         public InputAction @Jump => m_Wrapper.m_PlayerActions_Jump;
         public InputAction @X => m_Wrapper.m_PlayerActions_X;
+        public InputAction @Roll => m_Wrapper.m_PlayerActions_Roll;
+        public InputAction @Slide => m_Wrapper.m_PlayerActions_Slide;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -481,6 +549,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @X.started += instance.OnX;
             @X.performed += instance.OnX;
             @X.canceled += instance.OnX;
+            @Roll.started += instance.OnRoll;
+            @Roll.performed += instance.OnRoll;
+            @Roll.canceled += instance.OnRoll;
+            @Slide.started += instance.OnSlide;
+            @Slide.performed += instance.OnSlide;
+            @Slide.canceled += instance.OnSlide;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -494,6 +568,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @X.started -= instance.OnX;
             @X.performed -= instance.OnX;
             @X.canceled -= instance.OnX;
+            @Roll.started -= instance.OnRoll;
+            @Roll.performed -= instance.OnRoll;
+            @Roll.canceled -= instance.OnRoll;
+            @Slide.started -= instance.OnSlide;
+            @Slide.performed -= instance.OnSlide;
+            @Slide.canceled -= instance.OnSlide;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -521,5 +601,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnB(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnX(InputAction.CallbackContext context);
+        void OnRoll(InputAction.CallbackContext context);
+        void OnSlide(InputAction.CallbackContext context);
     }
 }

@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     CameraManager cameraManager;
     PlayerLocomotion playerLocomotion;
 
+    // Flags for player interaction and root motion states
     public bool isInteracting;
     public bool isUsingRootMotion;
 
@@ -34,6 +35,7 @@ public class PlayerManager : MonoBehaviour
     {
         cameraManager.HandleAllCameraMovement();
 
+        // Update interaction and root motion flags based on animator states
         isInteracting = animator.GetBool("isInteracting");
         isUsingRootMotion = animator.GetBool("isUsingRootMotion");
         playerLocomotion.isJumping = animator.GetBool("isJumping");

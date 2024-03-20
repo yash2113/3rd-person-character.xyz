@@ -16,14 +16,18 @@ public class AnimatorManager : MonoBehaviour
         animator = GetComponent<Animator>();
         playerManager = GetComponent<PlayerManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+
+        // Cache hash codes for animation parameters
         horizontal = Animator.StringToHash("Horizontal");
         vertical = Animator.StringToHash("Vertical");
     }
 
-    public void PlayargetAnimation(string targetAnimation, bool isInteracting, bool useRootMotion = false)
+    public void PlayTargetAnimation(string targetAnimation, bool isInteracting, bool useRootMotion = false)
     {
         animator.SetBool("isInteracting", isInteracting);
         animator.SetBool("isUsingRootMotion", useRootMotion);
+
+        // Smoothly transition to the target animation
         animator.CrossFade(targetAnimation, 0.2f);
     }
 
@@ -91,7 +95,8 @@ public class AnimatorManager : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-        if(playerManager.isUsingRootMotion)
+        // Apply root motion if enabled
+        if (playerManager.isUsingRootMotion)
         {
             playerLocomotion.playerRigidBody.drag = 0;
             Vector3 deltaPosition = animator.deltaPosition;

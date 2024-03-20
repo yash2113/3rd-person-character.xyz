@@ -46,6 +46,7 @@ public class CameraManager : MonoBehaviour
 
     private void FollowTarget()
     {
+        // Smoothly damp the camera's position to the target's position
         Vector3 targetPosition = Vector3.SmoothDamp
             (transform.position, targetTransform.position, ref cameraFollowVelocity, cameraFollowSpeed);
 
@@ -57,10 +58,12 @@ public class CameraManager : MonoBehaviour
         Vector3 rotation;
         Quaternion targetRotation;
 
+        // Calculate rotation angles based on input
         lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed);
         pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed);
         pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
 
+        // Apply rotation to the camera and its pivot
         rotation = Vector3.zero;
         rotation.y = lookAngle;
         targetRotation = Quaternion.Euler(rotation);
@@ -74,11 +77,13 @@ public class CameraManager : MonoBehaviour
 
     private void HandleCameraCollisions()
     {
+        // Calculate target position for collision handling
         float targetPosition = defaultPositon;
         RaycastHit hit;
         Vector3 direction = cameraTransform.position - cameraPivot.position;
         direction.Normalize();
 
+        //Sphere cast to check collision layers
         if(Physics.SphereCast
             (cameraPivot.transform.position, cameraCollisionRadius, direction, out hit, Mathf.Abs(targetPosition),collisionLayers))
         {
@@ -86,11 +91,13 @@ public class CameraManager : MonoBehaviour
             targetPosition =- (distance - cameraCollisionOffset);
         }
 
-        if(Mathf.Abs(targetPosition) < minimumCollisionOffset)
+        // Ensure the target position does not go below the minimum collision offset
+        if (Mathf.Abs(targetPosition) < minimumCollisionOffset)
         {
             targetPosition = targetPosition - minimumCollisionOffset;
         }
 
+        // Smoothly adjust the camera's position based on collision detection
         cameraVectorPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, 0.2f);
         cameraTransform.localPosition = cameraVectorPosition;
 
