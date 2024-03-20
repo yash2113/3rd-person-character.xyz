@@ -10,7 +10,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     Vector3 moveDirection;
     Transform cameraObject;
-    Rigidbody playerRigidBody;
+    public Rigidbody playerRigidBody;
 
     [Header("Falling")]
     public float inAirTimer;
@@ -119,7 +119,9 @@ public class PlayerLocomotion : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 rayCastOrigin = transform.position;
+        Vector3 targetPosition;
         rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffset;
+        targetPosition = transform.position;
 
         if (!isGrounded && !isJumping)
         {
@@ -128,26 +130,41 @@ public class PlayerLocomotion : MonoBehaviour
                 animatorManager.PlayargetAnimation("Falling", true);
             }
 
+            animatorManager.animator.SetBool("isUsingRootMotion", false);
             inAirTimer = inAirTimer + Time.deltaTime;
             playerRigidBody.AddForce(transform.forward * leapingVelocity);
             playerRigidBody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
         }
 
-        if (Physics.SphereCast(rayCastOrigin, 0.4f, -Vector3.up, out hit, groundLayer))
+        if (Physics.SphereCast(rayCastOrigin, 0.2f, -Vector3.up, out hit, groundLayer))
         {
             if (!isGrounded && !playerManager.isInteracting)
             {
                 animatorManager.PlayargetAnimation("Landing", true);
             }
 
+            Vector3 rayCastHitPoint = hit.point;
+            targetPosition.y = rayCastHitPoint.y;
             inAirTimer = 0;
             isGrounded = true;
         }
+        
         else
         {
             isGrounded = false;
         }
 
+        if (isGrounded && !isJumping)
+        {
+            if (playerManager.isInteracting || inputManager.moveAmount > 0)
+            {
+                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / 0.1f);
+            }
+            else
+            {
+                transform.position = targetPosition;
+            }
+        }
 
     }
 
@@ -164,6 +181,15 @@ public class PlayerLocomotion : MonoBehaviour
             playerRigidBody.velocity = playerVelocity;
 
         }
+    }
+
+    public void HandleDodge()
+    {
+        if(playerManager.isInteracting)
+        {
+            return;
+        }
+        animatorManager.PlayargetAnimation("Dodge", true, true);
     }
 
 }
