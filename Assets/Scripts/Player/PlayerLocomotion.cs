@@ -15,38 +15,38 @@ public class PlayerLocomotion : MonoBehaviour
     public Rigidbody playerRigidBody;
 
     [Header("Falling")]
-    public float inAirTimer;
-    public float leapingVelocity;
-    public float fallingVelocity;
-    public float rayCastHeightOffset = 0.5f;
-    public LayerMask groundLayer;
+    [SerializeField] private float inAirTimer;
+    [SerializeField] private float leapingVelocity;
+    [SerializeField] private float fallingVelocity;
+    [SerializeField] private float rayCastHeightOffset = 0.5f;
+    [SerializeField] private LayerMask groundLayer;
 
     [Header("Rolling")]
-    public float rollSpeed = 3f;
-    public float rollDistance = 4f;
+    [SerializeField] private float rollSpeed = 3f;
+    [SerializeField] private float rollDistance = 4f;
 
     [Header("Movement Flags")]
-    public bool isSprinting;
-    public bool isGrounded;
-    public bool isJumping;
-    public bool isCrouching;
+    [SerializeField] private bool isSprinting;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isJumping;
+    [SerializeField] private bool isCrouching;
 
     [Header("Movement Speeds")]
-    public float walkingSpeed = 1.5f;
-    public float runningSpeed = 5;
-    public float sprintingSpeed = 7;
-    public float rotationSpeed = 15;
+    [SerializeField] private float walkingSpeed = 1.5f;
+    [SerializeField] private float runningSpeed = 5;
+    [SerializeField] private float sprintingSpeed = 7;
+    [SerializeField] private float rotationSpeed = 15;
 
     [Header("Jump Speeds")]
-    public float jumpHeight = 3;
-    public float gravityIntensity = -15;
+    [SerializeField] private float jumpHeight = 3;
+    [SerializeField] private float gravityIntensity = -15;
 
     [Header("Sliding Speeds")]
-    public float slideSpeed = 5;
-    public float slideDistance = 5;
+    [SerializeField] private float slideSpeed = 5;
+    [SerializeField] private float slideDistance = 5;
 
     [Header("Crouching Speeds")]
-    public float crouchingSpeedMultiplier = 0.5f;
+    [SerializeField] private float crouchingSpeedMultiplier = 0.5f;
 
 
     private void Awake()
@@ -72,6 +72,7 @@ public class PlayerLocomotion : MonoBehaviour
         HandleCrouching();
     }
 
+    #region Handle Movement
     private void HandleMovement()
     {
 
@@ -81,8 +82,8 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         // Calculate the move direction based on player input and camera orientation
-        moveDirection = cameraObject.forward * inputManager.verticalInput;
-        moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
+        moveDirection = cameraObject.forward * inputManager.GetVerticalInput();
+        moveDirection = moveDirection + cameraObject.right * inputManager.GetHorizontalInput();
         moveDirection.Normalize();
         moveDirection.y = 0;
 
@@ -112,7 +113,9 @@ public class PlayerLocomotion : MonoBehaviour
         Vector3 movementVelocity = moveDirection;
         playerRigidBody.velocity = movementVelocity;
     }
+    #endregion
 
+    #region Handle Rotation
     private void HandleRotation()
     {
         if (isJumping)
@@ -123,8 +126,8 @@ public class PlayerLocomotion : MonoBehaviour
         // Calculate the target direction for rotation
         Vector3 targetDirection = Vector3.zero;
 
-        targetDirection = cameraObject.forward * inputManager.verticalInput;
-        targetDirection = targetDirection + cameraObject.right * inputManager.horizontalInput;
+        targetDirection = cameraObject.forward * inputManager.GetVerticalInput();
+        targetDirection = targetDirection + cameraObject.right * inputManager.GetHorizontalInput();
         targetDirection.Normalize();
         targetDirection.y = 0;
 
@@ -139,7 +142,9 @@ public class PlayerLocomotion : MonoBehaviour
 
         transform.rotation = playerRotation;
     }
+    #endregion
 
+    #region Handle Falling and landing
     private void HandleFallingAndLanding()
     {
         // Perform a raycast to check if the player is grounded
@@ -199,7 +204,9 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
     }
+    #endregion
 
+    #region Handle Jumping
     public void HandleJumping()
     {
         if (isGrounded)
@@ -214,7 +221,9 @@ public class PlayerLocomotion : MonoBehaviour
 
         }
     }
+    #endregion
 
+    #region Handle Dodge
     public void HandleDodge()
     {
         if(playerManager.isInteracting)
@@ -223,7 +232,9 @@ public class PlayerLocomotion : MonoBehaviour
         }
         animatorManager.PlayTargetAnimation("Dodge", true, true);
     }
+    #endregion
 
+    #region Handle Roll
     public void HandleRoll()
     {
         StartCoroutine(HandleRollCoroutine());
@@ -265,7 +276,9 @@ public class PlayerLocomotion : MonoBehaviour
         // Ensure the player ends up exactly at the target position
         transform.position = targetPosition;
     }
+    #endregion
 
+    #region Handle Slide
     public void HandleSlide()
     {
         // Calculate the target position for the slide based on the moveDirection and slide distance
@@ -292,6 +305,9 @@ public class PlayerLocomotion : MonoBehaviour
         transform.position = targetPosition; // Ensure the final position is exactly the target
     }
 
+    #endregion
+
+    #region Handle Crouching
     private void HandleCrouching()
     {
         if (isCrouching)
@@ -299,5 +315,34 @@ public class PlayerLocomotion : MonoBehaviour
             animatorManager.PlayTargetAnimation("Crouch", true);
         }
     }
+    #endregion
 
+    public bool GetIsSprinting()
+    {
+        return isSprinting;
+    }
+    public void SetIsSprinting(bool _isSprinting)
+    {
+        isSprinting = _isSprinting;
+    }
+    public bool GetIsGrounded()
+    {
+        return isGrounded;
+    }
+    public bool GetIsJumping()
+    {
+        return isJumping;
+    }
+    public void SetIsJumping(bool _isJumping)
+    {
+        isJumping = _isJumping;
+    }
+    public bool GetIsCrouching()
+    {
+        return isCrouching;
+    }
+    public void SetIsCrouching(bool _isCrouching)
+    {
+        isCrouching = _isCrouching;
+    }
 }

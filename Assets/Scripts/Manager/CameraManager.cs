@@ -16,18 +16,18 @@ public class CameraManager : MonoBehaviour
     private Vector3 cameraFollowVelocity = Vector3.zero;
     private Vector3 cameraVectorPosition;
 
-    public float cameraCollisionOffset = 0.2f; // How much the camera will jump off of objects its colliding with
-    public float minimumCollisionOffset = 0.2f;
-    public float cameraCollisionRadius = 0.2f;
-    public float cameraFollowSpeed = 0.2f;
-    public float cameraLookSpeed = 2f;
-    public float cameraPivotSpeed = 2f;
+    [SerializeField] private float cameraCollisionOffset = 0.2f; // How much the camera will jump off of objects its colliding with
+    [SerializeField] private float minimumCollisionOffset = 0.2f;
+    [SerializeField] private float cameraCollisionRadius = 0.2f;
+    [SerializeField] private float cameraFollowSpeed = 0.2f;
+    [SerializeField] private float cameraLookSpeed = 2f;
+    [SerializeField] private float cameraPivotSpeed = 2f;
 
-    public float lookAngle; //Camera looking Up and Down
-    public float pivotAngle; //Camera looking left and right
+    private float lookAngle; //Camera looking Up and Down
+    private float pivotAngle; //Camera looking left and right
 
-    public float minimumPivotAngle = -35f;
-    public float maximumPivotAngle = 35f;
+    [SerializeField] private float minimumPivotAngle = -35f;
+    [SerializeField] private float maximumPivotAngle = 35f;
 
     private void Awake()
     {
@@ -59,8 +59,8 @@ public class CameraManager : MonoBehaviour
         Quaternion targetRotation;
 
         // Calculate rotation angles based on input
-        lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed);
-        pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed);
+        lookAngle = lookAngle + (inputManager.GetCameraInputX() * cameraLookSpeed);
+        pivotAngle = pivotAngle - (inputManager.GetCameraInputY() * cameraPivotSpeed);
         pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
 
         // Apply rotation to the camera and its pivot

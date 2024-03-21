@@ -38,9 +38,9 @@ public class PlayerManager : MonoBehaviour
         // Update interaction and root motion flags based on animator states
         isInteracting = animator.GetBool("isInteracting");
         isUsingRootMotion = animator.GetBool("isUsingRootMotion");
-        playerLocomotion.isJumping = animator.GetBool("isJumping");
-        animator.SetBool("isCrouching", playerLocomotion.isCrouching);
-        animator.SetBool("isGrounded", playerLocomotion.isGrounded);
+        playerLocomotion.SetIsJumping(animator.GetBool("isJumping"));
+        animator.SetBool("isCrouching", playerLocomotion.GetIsCrouching());
+        animator.SetBool("isGrounded", playerLocomotion.GetIsGrounded());
     }
 
 }

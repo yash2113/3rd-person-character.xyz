@@ -8,22 +8,22 @@ public class InputManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     AnimatorManager animatorManager;
 
-    public Vector2 movementInput;
-    public Vector2 cameraInput;
+    private Vector2 movementInput;
+    private Vector2 cameraInput;
 
-    public float cameraInputX;
-    public float cameraInputY;
+    private float cameraInputX;
+    private float cameraInputY;
 
     public float moveAmount;
-    public float verticalInput;
-    public float horizontalInput;
+    private float verticalInput;
+    private float horizontalInput;
 
-    public bool b_Input; // sprinting input
-    public bool x_Input; // dodge input
-    public bool jump_Input; // jumping input
-    public bool roll_Input; // rolling input
-    public bool slide_Input; // sliding input
-    public bool crouch_Input; // crouch input
+    private bool b_Input; // sprinting input
+    private bool x_Input; // dodge input
+    private bool jump_Input; // jumping input
+    private bool roll_Input; // rolling input
+    private bool slide_Input; // sliding input
+    private bool crouch_Input; // crouch input
 
     private void Awake()
     {
@@ -82,6 +82,8 @@ public class InputManager : MonoBehaviour
         HandleCrouchingInput();
     }
 
+    #region Handle Inputs
+
     private void HandleMovementInput()
     {
         verticalInput = movementInput.y;
@@ -92,7 +94,7 @@ public class InputManager : MonoBehaviour
 
         // Calculate the total movement input amount
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
-        animatorManager.UpdateAnimatorValues(0, moveAmount, playerLocomotion.isSprinting);
+        animatorManager.UpdateAnimatorValues(0, moveAmount, playerLocomotion.GetIsSprinting());
     }
 
     private void HandleSprintingInput()
@@ -100,11 +102,11 @@ public class InputManager : MonoBehaviour
         //Keep sprinting only availabe if sprint button pressed and spped is above 0.5f
         if (b_Input && moveAmount > 0.5f)
         {
-            playerLocomotion.isSprinting = true;
+            playerLocomotion.SetIsSprinting(true); 
         }
         else
         {
-            playerLocomotion.isSprinting = false;
+            playerLocomotion.SetIsSprinting(false);
         }
     }
 
@@ -148,11 +150,30 @@ public class InputManager : MonoBehaviour
     {
         if (crouch_Input /*&& moveAmount < 0.5f*/)
         {
-            playerLocomotion.isCrouching = true;
+            playerLocomotion.SetIsCrouching(true); 
         }
         else
         {
-            playerLocomotion.isCrouching = false;
+            playerLocomotion.SetIsCrouching(false);
         }
+    }
+    #endregion
+
+    public float GetCameraInputX()
+    {
+        return cameraInputX;
+    }
+    public float GetCameraInputY()
+    {
+        return cameraInputY;
+    }
+    public float GetHorizontalInput()
+    {
+        return horizontalInput;
+    }
+
+    public float GetVerticalInput()
+    {
+        return verticalInput;
     }
 }
