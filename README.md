@@ -50,3 +50,5 @@ Crouch:
 Keyboard: Hold C
 
 Gamepad: Hold D-Pad Down
+
+Current GamePlay video as of 21/03/2024 - https://www.youtube.com/watch?v=D6MuZtH4au4&ab_channel=F2Pgamer
