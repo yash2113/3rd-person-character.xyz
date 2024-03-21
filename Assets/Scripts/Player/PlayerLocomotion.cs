@@ -29,6 +29,7 @@ public class PlayerLocomotion : MonoBehaviour
     public bool isSprinting;
     public bool isGrounded;
     public bool isJumping;
+    public bool isCrouching;
 
     [Header("Movement Speeds")]
     public float walkingSpeed = 1.5f;
@@ -43,6 +44,10 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Sliding Speeds")]
     public float slideSpeed = 5;
     public float slideDistance = 5;
+
+    [Header("Crouching Speeds")]
+    public float crouchingSpeedMultiplier = 0.5f;
+
 
     private void Awake()
     {
@@ -64,6 +69,7 @@ public class PlayerLocomotion : MonoBehaviour
 
         HandleMovement();
         HandleRotation();
+        HandleCrouching();
     }
 
     private void HandleMovement()
@@ -84,6 +90,11 @@ public class PlayerLocomotion : MonoBehaviour
         if (isSprinting)
         {
             moveDirection = moveDirection * sprintingSpeed;
+        }
+        else if(isCrouching)
+        {
+            Debug.Log("Moving at crouching");
+            moveDirection = moveDirection * (walkingSpeed * crouchingSpeedMultiplier);
         }
         else
         {
@@ -281,6 +292,12 @@ public class PlayerLocomotion : MonoBehaviour
         transform.position = targetPosition; // Ensure the final position is exactly the target
     }
 
-
+    private void HandleCrouching()
+    {
+        if (isCrouching)
+        {
+            animatorManager.PlayTargetAnimation("Crouch", true);
+        }
+    }
 
 }

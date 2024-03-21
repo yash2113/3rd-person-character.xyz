@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
     public bool jump_Input; // jumping input
     public bool roll_Input; // rolling input
     public bool slide_Input; // sliding input
+    public bool crouch_Input; // crouch input
 
     private void Awake()
     {
@@ -56,6 +57,10 @@ public class InputManager : MonoBehaviour
 
             //Jump 
             playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
+
+            //Crouching
+            playerControls.PlayerActions.Crouch.performed += i => crouch_Input = true;
+            playerControls.PlayerActions.Crouch.canceled += i => crouch_Input = false;
         }
 
         playerControls.Enable();
@@ -74,6 +79,7 @@ public class InputManager : MonoBehaviour
         HandleDodgeInput();
         HandleRollingInput();
         HandleSlidingInput();
+        HandleCrouchingInput();
     }
 
     private void HandleMovementInput()
@@ -135,6 +141,18 @@ public class InputManager : MonoBehaviour
         {
             slide_Input = false;
             playerLocomotion.HandleSlide();
+        }
+    }
+
+    private void HandleCrouchingInput()
+    {
+        if (crouch_Input /*&& moveAmount < 0.5f*/)
+        {
+            playerLocomotion.isCrouching = true;
+        }
+        else
+        {
+            playerLocomotion.isCrouching = false;
         }
     }
 }

@@ -273,6 +273,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""db08ebcd-e33d-45df-a292-65649d4634d1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -385,6 +394,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Slide"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa6572f6-4195-4776-96e3-e6335ea2e51a"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8b4e9fab-d3f7-49bb-bf5e-922318beb7ba"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -402,6 +433,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_X = m_PlayerActions.FindAction("X", throwIfNotFound: true);
         m_PlayerActions_Roll = m_PlayerActions.FindAction("Roll", throwIfNotFound: true);
         m_PlayerActions_Slide = m_PlayerActions.FindAction("Slide", throwIfNotFound: true);
+        m_PlayerActions_Crouch = m_PlayerActions.FindAction("Crouch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -522,6 +554,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_X;
     private readonly InputAction m_PlayerActions_Roll;
     private readonly InputAction m_PlayerActions_Slide;
+    private readonly InputAction m_PlayerActions_Crouch;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -531,6 +564,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @X => m_Wrapper.m_PlayerActions_X;
         public InputAction @Roll => m_Wrapper.m_PlayerActions_Roll;
         public InputAction @Slide => m_Wrapper.m_PlayerActions_Slide;
+        public InputAction @Crouch => m_Wrapper.m_PlayerActions_Crouch;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -555,6 +589,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Slide.started += instance.OnSlide;
             @Slide.performed += instance.OnSlide;
             @Slide.canceled += instance.OnSlide;
+            @Crouch.started += instance.OnCrouch;
+            @Crouch.performed += instance.OnCrouch;
+            @Crouch.canceled += instance.OnCrouch;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -574,6 +611,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Slide.started -= instance.OnSlide;
             @Slide.performed -= instance.OnSlide;
             @Slide.canceled -= instance.OnSlide;
+            @Crouch.started -= instance.OnCrouch;
+            @Crouch.performed -= instance.OnCrouch;
+            @Crouch.canceled -= instance.OnCrouch;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -603,5 +643,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnX(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnSlide(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
     }
 }
